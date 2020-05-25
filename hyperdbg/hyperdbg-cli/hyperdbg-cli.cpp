@@ -1,50 +1,96 @@
+/**
+ * @file hyperdbg-cli.cpp
+ * @author Sina Karvandi (sina@rayanfam.com)
+ * @brief Main HyperDbg Cli source coede
+ * @details
+ * @version 0.1
+ * @date 2020-04-11
+ * 
+ * @copyright This project is released under the GNU Public License v3.
+ * 
+ */
 #include <Windows.h>
+#include <string>
 #include <conio.h>
 #include <iostream>  
-#include "Definitions.h"
+#include "Definition.h"
 #include "Configuration.h"
+#include "details.h"
 
 #pragma comment(lib, "HPRDBGCTRL.lib")
 
+using namespace std;
+
+//
 // Header file of HPRDBGCTRL
-// Exports
+// Imports
+//
 extern "C"
 {
 	__declspec (dllimport) int __cdecl  HyperdbgLoad();
 	__declspec (dllimport) int __cdecl  HyperdbgUnload();
+	__declspec (dllimport) int __cdecl  HyperdbgInstallDriver();
+	__declspec (dllimport) int __cdecl  HyperdbgUninstallDriver();
+	__declspec (dllimport) int __cdecl  HyperdbgInterpreter(const char* Command);
 	__declspec (dllimport) void __stdcall HyperdbgSetTextMessageCallback(Callback handler);
 
 }
 
-void PrintAppearance() {
 
-	printf("\n"
-
-
-		"    _   _                             _                  _____                      ____                 _       _     \n"
-		"   | | | |_   _ _ __   ___ _ ____   _(_)___  ___  _ __  |  ___| __ ___  _ __ ___   / ___|  ___ _ __ __ _| |_ ___| |__  \n"
-		"   | |_| | | | | '_ \\ / _ \\ '__\\ \\ / / / __|/ _ \\| '__| | |_ | '__/ _ \\| '_ ` _ \\  \\___ \\ / __| '__/ _` | __/ __| '_ \\ \n"
-		"   |  _  | |_| | |_) |  __/ |   \\ V /| \\__ \\ (_) | |    |  _|| | | (_) | | | | | |  ___) | (__| | | (_| | || (__| | | |\n"
-		"   |_| |_|\\__, | .__/ \\___|_|    \\_/ |_|___/\\___/|_|    |_|  |_|  \\___/|_| |_| |_| |____/ \\___|_|  \\__,_|\\__\\___|_| |_|\n"
-		"          |___/|_|                                                                                                     \n"
-		"\n\n");
-}
-
-
+/**
+ * @brief CLI main function
+ * 
+ * @return int 
+ */
 int main()
 {
-	// Print Hypervisor From Scratch Message
-	PrintAppearance();
+	//
+	// Put to ease the test, it will be removed
+	//
+	
+	/* if (HyperdbgInstallDriver()) {
+		return 1;
+	}
 
-	HyperdbgLoad();
-
-	printf("Press any key to exit vmx ...");
+	if (HyperdbgLoad()) {
+		return 1;
+	}
 	_getch();
+	_getch();
+	return 0; */
+	
 
-	HyperdbgUnload();
+	// ---------------------------------------------------------
 
-	exit(0);
+	
+	bool ExitFromDebugger = false;
 
+	printf("HyperDbg Debugger [core version: v%s]\n",Version);
+	printf("Please visit https://docs.hyperdbg.com for more information...\n");
+	printf("HyperDbg is released under the GNU Public License v3 (GPLv3).\n\n");
+
+	while (!ExitFromDebugger) 
+	{
+		printf("HyperDbg >");
+
+		string command;
+		getline(cin, command);
+		int CommandExecutionResult = HyperdbgInterpreter(command.c_str());
+		printf("\n");
+
+		//
+		//if the debugger encounters an exit state then the return will be 1
+		//
+		if (CommandExecutionResult == 1)
+		{
+			//
+			// Exit from the debugger
+			//
+			ExitFromDebugger = true;
+		}
+
+
+	}
 	return 0;
 }
 

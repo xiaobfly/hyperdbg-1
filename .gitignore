@@ -355,3 +355,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# VS Code
+**/.vscode/
+
+# Exceptions
+!/hyperdbg/libraries/*
+!/hyperdbg/libraries/pdbex/*
+!/hyperdbg/libraries/zydis/*
+!/hyperdbg/libraries/DIA/*
+!/hyperdbg/libraries/DIA/x84/*
+!/hyperdbg/libraries/DIA/x64/*

@@ -1,0 +1,6 @@
+[submodule "hyperdbg/dependencies/pdbex"]
+	path = hyperdbg/dependencies/pdbex
+	url = https://github.com/wbenny/pdbex.git
+[submodule "hyperdbg/dependencies/zydis"]
+	path = hyperdbg/dependencies/zydis
+	url = https://github.com/zyantific/zydis
